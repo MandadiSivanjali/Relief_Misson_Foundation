@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BrightWeb - Dynamic Navbar Colors</title>
+
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: "Poppins", sans-serif; scroll-behavior: smooth; }
+
+    /* ===== Navbar ===== */
+    nav {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 70px;
+      background: transparent;
+      transition: background 0.6s ease, box-shadow 0.6s ease, color 0.6s ease;
+      z-index: 1000;
+    }
+
+    .logo {
+      font-size: 28px;
+      font-weight: 700;
+      color: #fff;
+      letter-spacing: 1px;
+      transition: color 0.4s ease;
+    }
+
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 35px;
+    }
+
+    nav ul li a {
+      text-decoration: none;
+      font-size: 18px;
+      color: #fff;
+      position: relative;
+      transition: color 0.4s ease;
+    }
+
+    nav ul li a::after {
+      content: "";
+      position: absolute;
+      bottom: -5px;
+      left: 0;
+      width: 0%;
+      height: 2px;
+      background: #ffcc00;
+      transition: width 0.3s ease;
+    }
+    nav ul li a:hover::after { width: 100%; }
+
+    /* ===== Section Styling ===== */
+    header {
+      height: 100vh;
+      background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),
+        url('https://images.unsplash.com/photo-1503264116251-35a269479413?auto=format&fit=crop&w=1400&q=80')
+        center/cover no-repeat;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      color: #fff;
+      padding: 0 20px;
+    }
+
+    header h1 { font-size: 60px; font-weight: 700; margin-bottom: 15px; }
+    header p { font-size: 20px; max-width: 700px; opacity: 0.9; }
+
+    section { padding: 100px 60px; text-align: center; }
+
+    section h2 {
+      font-size: 40px;
+      margin-bottom: 25px;
+      color: #1e1e2f;
+    }
+
+    section p {
+      font-size: 18px;
+      color: #555;
+      max-width: 850px;
+      margin: 20px auto;
+      line-height: 1.8;
+    }
+
+    /* ===== About Section ===== */
+    #about {
+      background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+    }
+
+    .about-content {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 40px;
+    }
+
+    .about-content img {
+      width: 400px;
+      border-radius: 10px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    }
+
+    .about-text {
+      max-width: 500px;
+      text-align: left;
+    }
+
+    /* ===== Services Section ===== */
+    #services {
+      background: linear-gradient(135deg, #fff8e1, #ffe082);
+    }
+
+    .service-boxes {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 30px;
+      margin-top: 40px;
+    }
+
+    .service {
+      background: #fff;
+      padding: 30px;
+      border-radius: 10px;
+      width: 280px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .service:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+    }
+
+    .service h3 { color: #222; margin-bottom: 15px; }
+    .service p { color: #555; }
+
+    /* ===== Contact Section ===== */
+    #contact {
+      background: linear-gradient(135deg, #ffebee, #ffcdd2);
+    }
+
+    .contact-container {
+      max-width: 700px;
+      margin: auto;
+      background: #fff;
+      padding: 40px;
+      border-radius: 10px;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+    }
+
+    .contact-container input, .contact-container textarea {
+      width: 100%;
+      padding: 12px 15px;
+      margin-bottom: 20px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 16px;
+      font-family: inherit;
+    }
+
+    .contact-container button {
+      background: #ff9900;
+      color: #fff;
+      border: none;
+      padding: 12px 25px;
+      font-size: 18px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    .contact-container button:hover {
+      background: #e68a00;
+    }
+
+    /* ===== Responsive ===== */
+    @media (max-width: 768px) {
+      nav { padding: 15px 30px; }
+      nav ul { gap: 20px; }
+      header h1 { font-size: 42px; }
+      .about-content { flex-direction: column; text-align: center; }
+      .about-text { text-align: center; }
+    }
+  </style>
+</head>
+<body>
+  <nav id="navbar">
+    <div class="logo">BrightWeb</div>
+    <ul>
+      <li><a href="#home">Home</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#services">Services</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <header id="home">
+    <h1>Building Vibrant Digital Experiences</h1>
+    <p>Scroll down to see the navbar adapt its colors to each section.</p>
+  </header>
+
+  <section id="about">
+    <h2>About Us</h2>
+    <div class="about-content">
+      <img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=800&q=80" alt="Team working">
+      <div class="about-text">
+        <p>We’re a passionate team of developers, designers, and innovators crafting seamless digital experiences. Our goal is to blend creativity with technology — delivering designs that are as functional as they are beautiful.</p>
+        <p>At <b>BrightWeb</b>, we believe every project is an opportunity to shine — whether it’s building a startup website or a large-scale application.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="services">
+    <h2>Our Services</h2>
+    <div class="service-boxes">
+      <div class="service">
+        <h3>Web Development</h3>
+        <p>Responsive, fast, and modern websites tailored for your brand’s needs using the latest technologies.</p>
+      </div>
+      <div class="service">
+        <h3>UI/UX Design</h3>
+        <p>Intuitive, visually stunning interfaces focused on delivering a delightful user experience.</p>
+      </div>
+      <div class="service">
+        <h3>Brand Identity</h3>
+        <p>From logo creation to visual storytelling, we help shape your brand into something unforgettable.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact">
+    <h2>Contact Us</h2>
+    <div class="contact-container">
+      <form>
+        <input type="text" placeholder="Your Name" required>
+        <input type="email" placeholder="Your Email" required>
+        <textarea rows="5" placeholder="Your Message" required></textarea>
+        <button type="submit">Send Message</button>
+      </form>
+    </div>
+  </section>
+
+  <script>
+    const navbar = document.getElementById("navbar");
+    const sections = document.querySelectorAll("section, header");
+
+    window.addEventListener("scroll", () => {
+      let current = "";
+
+      sections.forEach((section) => {
+        const sectionTop = section.offsetTop - 150;
+        if (window.scrollY >= sectionTop) {
+          current = section.getAttribute("id");
+        }
+      });
+
+      // Change navbar background depending on section
+      if (current === "home") {
+        navbar.style.background = "transparent";
+        navbar.style.boxShadow = "none";
+      } else if (current === "about") {
+        navbar.style.background = "linear-gradient(135deg, #90caf9, #64b5f6)";
+        navbar.style.boxShadow = "0 3px 10px rgba(0,0,0,0.2)";
+      } else if (current === "services") {
+        navbar.style.background = "linear-gradient(135deg, #ffeb3b, #ffc107)";
+        navbar.style.boxShadow = "0 3px 10px rgba(0,0,0,0.2)";
+      } else if (current === "contact") {
+        navbar.style.background = "linear-gradient(135deg, #f48fb1, #f06292)";
+        navbar.style.boxShadow = "0 3px 10px rgba(0,0,0,0.2)";
+      }
+    });
+  </script>
+</body>
+</html>

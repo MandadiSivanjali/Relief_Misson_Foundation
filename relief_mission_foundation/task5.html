@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Weather App - Mandadi Sivanjali</title>
+  <style>
+    body {
+      font-family: "Poppins", sans-serif;
+      background: linear-gradient(135deg, #0f172a, #1e293b, #0a192f);
+      color: #fff;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      margin: 0;
+    }
+
+    .container {
+      text-align: center;
+      background: rgba(255, 255, 255, 0.05);
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 0 25px rgba(0, 198, 255, 0.3);
+      width: 400px;
+    }
+
+    h1 {
+      color: #00eaff;
+      margin-bottom: 20px;
+    }
+
+    input {
+      width: 75%;
+      padding: 10px;
+      border: none;
+      border-radius: 10px;
+      margin-bottom: 15px;
+      text-align: center;
+    }
+
+    button {
+      padding: 10px 20px;
+      background: #00eaff;
+      border: none;
+      border-radius: 10px;
+      color: #0f172a;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.3s;
+      margin: 5px;
+    }
+
+    button:hover {
+      background: #0094ff;
+      color: #fff;
+    }
+
+    .weather {
+      display: none;
+      margin-top: 20px;
+    }
+
+    .weather img {
+      width: 80px;
+      height: 80px;
+    }
+
+    .error {
+      color: #ff6b6b;
+      margin-top: 15px;
+      font-weight: 500;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🌤️ Weather App</h1>
+    <input type="text" id="cityInput" placeholder="Enter city name" />
+    <br />
+    <button id="searchBtn">Get Weather</button>
+    <button id="locBtn">📍 Use My Location</button>
+
+    <div class="weather" id="weather">
+      <img id="icon" src="" alt="Weather Icon" />
+      <h2 id="temp"></h2>
+      <p id="desc"></p>
+      <p id="city"></p>
+      <p id="extra"></p>
+    </div>
+    <p class="error" id="error"></p>
+  </div>
+
+  <script>
+    const apiKey = "ea8368b83754b878e560306a4ae69b35";
+    const weatherDiv = document.getElementById("weather");
+    const errorDiv = document.getElementById("error");
+
+    async function getWeather(city) {
+      const trimmedCity = city.trim();
+      if (!trimmedCity) {
+        showError("Please enter a city name.");
+        return;
+      }
+
+      try {
+        const response = await fetch(
+          `https://api.openweathermap.org/data/2.5/weather?q=${encodeURIComponent(trimmedCity)}&appid=${apiKey}&units=metric`
+        );
+        const data = await response.json();
+
+        if (data.cod !== 200) {
+          throw new Error(data.message);
+        }
+        displayWeather(data);
+      } catch (error) {
+        showError("City not found. Please try again.");
+      }
+    }
+
+    function displayWeather(data) {
+      errorDiv.textContent = "";
+      weatherDiv.style.display = "block";
+
+      document.getElementById("icon").src = `https://openweathermap.org/img/wn/${data.weather[0].icon}@2x.png`;
+      document.getElementById("temp").textContent = `${data.main.temp}°C`;
+      document.getElementById("desc").textContent = data.weather[0].description.toUpperCase();
+      document.getElementById("city").textContent = `${data.name}, ${data.sys.country}`;
+      document.getElementById("extra").textContent = `Humidity: ${data.main.humidity}% | Wind: ${data.wind.speed} m/s`;
+    }
+
+    function showError(msg) {
+      weatherDiv.style.display = "none";
+      errorDiv.textContent = msg;
+    }
+
+    document.getElementById("searchBtn").addEventListener("click", () => {
+      const city = document.getElementById("cityInput").value;
+      getWeather(city);
+    });
+
+    document.getElementById("locBtn").addEventListener("click", () => {
+      if (!navigator.geolocation) {
+        showError("Geolocation is not supported by your browser.");
+        return;
+      }
+
+      navigator.geolocation.getCurrentPosition(
+        async (position) => {
+          const lat = position.coords.latitude;
+          const lon = position.coords.longitude;
+          try {
+            const response = await fetch(
+              `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${apiKey}&units=metric`
+            );
+            const data = await response.json();
+            displayWeather(data);
+          } catch {
+            showError("Error fetching location-based weather data.");
+          }
+        },
+        () => showError("Unable to get your location.")
+      );
+    });
+  </script>
+</body>
+</html>
